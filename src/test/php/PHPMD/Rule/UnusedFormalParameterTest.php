@@ -537,4 +537,16 @@ class UnusedFormalParameterTest extends AbstractTest
         $rule->setReport($this->getReportWithNoViolation());
         $rule->apply($methods[0]);
     }
+
+    /**
+     * testRuleDoesNotApplyToMethodWithOverrideAttribute
+     *
+     * @return void
+     */
+    public function testRuleDoesNotApplyToMethodWithOverrideAttribute()
+    {
+        $rule = new UnusedFormalParameter();
+        $rule->setReport($this->getReportWithNoViolation());
+        $rule->apply($this->getMethod());
+    }
 }

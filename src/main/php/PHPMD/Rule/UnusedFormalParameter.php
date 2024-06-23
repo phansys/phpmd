@@ -88,7 +88,7 @@ class UnusedFormalParameter extends AbstractLocalVariable implements FunctionAwa
 
     /**
      * Returns <b>true</b> when the given node is method with signature declared as inherited using
-     * {@inheritdoc} annotation.
+     * \Override attribute or the {@inheritdoc} annotation.
      *
      * @param \PHPMD\AbstractNode $node
      * @return boolean
@@ -98,7 +98,22 @@ class UnusedFormalParameter extends AbstractLocalVariable implements FunctionAwa
         if ($node instanceof MethodNode) {
             $comment = $node->getDocComment();
 
-            return $comment && preg_match('/@inheritdoc/i', $comment);
+            if ($comment && preg_match('/@inheritdoc/i', $comment)) {
+                return true;
+            }
+
+            $overrideClassName = 'Override';
+
+            if (class_exists($overrideClassName, false) && class_exists($node->getParentType()->getFullQualifiedName())) {
+                // Remove the "()" at the end of method's name.
+                $methodName = substr($node->getFullQualifiedName(), 0, -2);
+
+                foreach ((new \ReflectionMethod($methodName))->getAttributes() as $reflectionAttribute) {
+                    if ($reflectionAttribute->getName() === $overrideClassName) {
+                        return true;
+                    }
+                }
+            }
         }
 
         return false;
