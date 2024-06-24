@@ -21,6 +21,9 @@ use PDepend\Source\AST\ASTClass;
 use PDepend\Source\AST\ASTMethod;
 use PDepend\Source\AST\ASTNamespace;
 use PHPMD\AbstractTest;
+use PHPMD\Test\Inheritance\Bar;
+use PHPMD\Test\Inheritance\Baz;
+use PHPMD\Test\Inheritance\Foo;
 
 /**
  * Test case for the method node implementation.
@@ -245,11 +248,48 @@ class MethodNodeTest extends AbstractTest
      */
     public function testIsDeclarationReturnsFalseForInheritedDeclaration()
     {
+        // Requiring these files as the autoloading is not configured for them.
+        require_once __DIR__.'/../../../resources/files/classes/inheritance/Foo.php';
+        require_once __DIR__.'/../../../resources/files/classes/inheritance/Bar.php';
+        require_once __DIR__.'/../../../resources/files/classes/inheritance/Baz.php';
+
         $class = $this->getClassNodeForTestFile(__DIR__.'/../../../resources/files/classes/inheritance/Baz.php');
+        $className = $class->getFullQualifiedName();
+
+        $this->assertSame(Baz::class, $className);
+        $this->assertTrue(is_subclass_of($className, Foo::class));
+
         $methods = $class->getMethods();
 
         $this->assertCount(1, $methods);
         $this->assertArrayHasKey(0, $methods);
+
+        $parentClass = $class->getParentClass();
+        $parentClassName = $parentClass->getNamespacedName();
+
+        $this->assertSame(Bar::class, $parentClassName);
+        // $this->assertTrue($parentClass->isAbstract());
+        $this->assertTrue(is_subclass_of($parentClassName, Foo::class));
+
+        $parentMethods = $parentClass->getMethods();
+        $this->assertEmpty($parentMethods);
+
+        // $interfaces = $parentClass->getInterfaces();
+        // $this->assertCount(1, $interfaces);
+        // $this->assertArrayHasKey(0, $interfaces);
+
+        // $interface = $interfaces[0];
+
+        // $this->assertSame(Foo::class, $interface->getNamespacedName());
+
+        // $interfaceMethods = $interface->getMethods();
+
+        // $this->assertCount(1, $interfaceMethods);
+        // $this->assertArrayHasKey(0, $interfaceMethods);
+
+        // $iterfaceMethod = $interfaceMethods[0];
+
+        // $this->assertTrue($iterfaceMethod->isDeclaration());
 
         $method = $methods[0];
 
