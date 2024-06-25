@@ -15,12 +15,18 @@
  * @link http://phpmd.org/
  */
 
-namespace PHPMD\Test\Inheritance;
-
-class Baz extends Bar
+class testIsDeclarationReturnsFalseForInheritedMethod extends testIsDeclarationReturnsFalseForInheritedMethodAbstractClass
 {
-    public function doFoo()
+    public function testIsDeclarationReturnsFalseForInheritedMethod($foo)
     {
-        // ...
     }
+}
+
+abstract class testIsDeclarationReturnsFalseForInheritedMethodAbstractClass implements testIsDeclarationReturnsFalseForInheritedMethodInterface
+{
+}
+
+interface testIsDeclarationReturnsFalseForInheritedMethodInterface
+{
+    function testIsDeclarationReturnsFalseForInheritedMethod($foo);
 }
