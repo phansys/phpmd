@@ -102,14 +102,13 @@ class UnusedFormalParameter extends AbstractLocalVariable implements FunctionAwa
                 return true;
             }
 
-            $overrideClassName = 'Override';
-
-            if (class_exists($overrideClassName, false) && class_exists($node->getParentType()->getFullQualifiedName())) {
+            if (\PHP_VERSION_ID >= 80300 && class_exists($node->getParentType()->getFullQualifiedName())) {
                 // Remove the "()" at the end of method's name.
                 $methodName = substr($node->getFullQualifiedName(), 0, -2);
+                $reflectionMethod = new \ReflectionMethod($methodName);
 
-                foreach ((new \ReflectionMethod($methodName))->getAttributes() as $reflectionAttribute) {
-                    if ($reflectionAttribute->getName() === $overrideClassName) {
+                foreach ($reflectionMethod->getAttributes() as $reflectionAttribute) {
+                    if ($reflectionAttribute->getName() === 'Override') {
                         return true;
                     }
                 }

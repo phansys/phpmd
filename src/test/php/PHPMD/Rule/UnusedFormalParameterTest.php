@@ -545,6 +545,13 @@ class UnusedFormalParameterTest extends AbstractTest
      */
     public function testRuleDoesNotApplyToMethodWithOverrideAttribute()
     {
+        if (\PHP_VERSION_ID < 80300) {
+            $this->markTestSkipped('This method requires PHP >= 8.3 beceuase it uses PHP attributes.');
+        }
+
+        $script = static::createCodeResourceUriForTest();
+        require_once $script;
+
         $rule = new UnusedFormalParameter();
         $rule->setReport($this->getReportWithNoViolation());
         $rule->apply($this->getMethod());
