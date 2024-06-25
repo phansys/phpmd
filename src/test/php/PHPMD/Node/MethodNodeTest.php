@@ -250,40 +250,41 @@ class MethodNodeTest extends AbstractTest
      */
     public function testIsDeclarationReturnsFalseForInheritedMethod()
     {
-        // $this->assertSame(Baz::class, $className);
-        // $this->assertTrue(is_subclass_of($className, Foo::class));
-
-        // $this->assertCount(1, $methods);
-        // $this->assertArrayHasKey(0, $methods);
-
-        // $parentClass = $class->getParentClass();
-        // $parentClassName = $parentClass->getNamespacedName();
-
-        // $this->assertSame(Bar::class, $parentClassName);
-        // // $this->assertTrue($parentClass->isAbstract());
-        // $this->assertTrue(is_subclass_of($parentClassName, Foo::class));
-
-        // $parentMethods = $parentClass->getMethods();
-        // $this->assertEmpty($parentMethods);
-
-        // $interfaces = $parentClass->getInterfaces();
-        // $this->assertCount(1, $interfaces);
-        // $this->assertArrayHasKey(0, $interfaces);
-
-        // $interface = $interfaces[0];
-
-        // $this->assertSame(Foo::class, $interface->getNamespacedName());
-
-        // $interfaceMethods = $interface->getMethods();
-
-        // $this->assertCount(1, $interfaceMethods);
-        // $this->assertArrayHasKey(0, $interfaceMethods);
-
-        // $iterfaceMethod = $interfaceMethods[0];
-
-        // $this->assertTrue($iterfaceMethod->isDeclaration());
         $method = $this->getMethod();
 
         $this->assertFalse($method->isDeclaration());
+
+        $class = $method->getParent();
+        $className = $class->getFullQualifiedName();
+
+        $this->assertSame('testIsDeclarationReturnsFalseForInheritedMethod', $className);
+
+        $parentClass = $class->getParentClass();
+        $parentClassName = $parentClass->getNamespacedName();
+
+        $this->assertSame('testIsDeclarationReturnsFalseForInheritedMethodAbstractClass', $parentClassName);
+        $this->assertTrue($parentClass->isAbstract());
+
+        $parentMethods = $parentClass->getMethods();
+
+        $this->assertEmpty($parentMethods);
+
+        $interfaces = $parentClass->getInterfaces();
+
+        $this->assertCount(1, $interfaces);
+        $this->assertArrayHasKey(0, $interfaces);
+
+        $interface = $interfaces[0];
+
+        $this->assertSame('testIsDeclarationReturnsFalseForInheritedMethodInterface', $interface->getNamespacedName());
+
+        $interfaceMethods = $interface->getMethods();
+
+        $this->assertCount(1, $interfaceMethods);
+        $this->assertArrayHasKey(0, $interfaceMethods);
+
+        $iterfaceMethod = $interfaceMethods[0];
+
+        $this->assertTrue($iterfaceMethod->isDeclaration());
     }
 }
