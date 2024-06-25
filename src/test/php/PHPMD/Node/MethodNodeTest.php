@@ -221,20 +221,47 @@ class MethodNodeTest extends AbstractTestCase
     }
 
     /**
+     * testIsDeclarationReturnsFalseForInheritedMethod
+     *
      * @throws Throwable
      */
-    public function testIsDeclarationReturnsFalseForInheritedDeclaration(): void
+    public function testIsDeclarationReturnsFalseForInheritedMethod(): void
     {
-        $method = $this->getNodeForTestFile(__DIR__ . '/../../../resources/files/classes/inheritance/Baz.php');
+        $method = $this->getMethod();
+
+        $this->assertFalse($method->isDeclaration());
 
         $class = $method->getParent();
+        $className = $class->getFullQualifiedName();
+
+        $this->assertSame('testIsDeclarationReturnsFalseForInheritedMethod', $className);
+
         $parentClass = $class->getParentClass();
         $parentClassName = $parentClass->getNamespacedName();
 
-        static::assertSame(Bar::class, $parentClassName);
-        // These assertions are commented because they are also failing (I guess they shouldn't).
-        // static::assertTrue($parentClass->isAbstract());
-        // static::assertCount(1, $parentClass->getInterfaces());
-        static::assertFalse($method->isDeclaration());
+        $this->assertSame('testIsDeclarationReturnsFalseForInheritedMethodAbstractClass', $parentClassName);
+        $this->assertTrue($parentClass->isAbstract());
+
+        $parentMethods = $parentClass->getMethods();
+
+        $this->assertEmpty($parentMethods);
+
+        $interfaces = $parentClass->getInterfaces();
+
+        $this->assertCount(1, $interfaces);
+        $this->assertArrayHasKey(0, $interfaces);
+
+        $interface = $interfaces[0];
+
+        $this->assertSame('testIsDeclarationReturnsFalseForInheritedMethodInterface', $interface->getNamespacedName());
+
+        $interfaceMethods = $interface->getMethods();
+
+        $this->assertCount(1, $interfaceMethods);
+        $this->assertArrayHasKey(0, $interfaceMethods);
+
+        $iterfaceMethod = $interfaceMethods[0];
+
+        $this->assertTrue($iterfaceMethod->isDeclaration());
     }
 }
