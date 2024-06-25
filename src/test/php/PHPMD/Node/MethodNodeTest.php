@@ -229,39 +229,39 @@ class MethodNodeTest extends AbstractTestCase
     {
         $method = $this->getMethod();
 
-        $this->assertFalse($method->isDeclaration());
+        static::assertFalse($method->isDeclaration());
 
         $class = $method->getParent();
         $className = $class->getFullQualifiedName();
 
-        $this->assertSame('testIsDeclarationReturnsFalseForInheritedMethod', $className);
+        static::assertSame('testIsDeclarationReturnsFalseForInheritedMethod', $className);
 
         $parentClass = $class->getParentClass();
         $parentClassName = $parentClass->getNamespacedName();
 
-        $this->assertSame('testIsDeclarationReturnsFalseForInheritedMethodAbstractClass', $parentClassName);
-        $this->assertTrue($parentClass->isAbstract());
+        static::assertSame('testIsDeclarationReturnsFalseForInheritedMethodAbstractClass', $parentClassName);
+        static::assertTrue($parentClass->isAbstract());
 
         $parentMethods = $parentClass->getMethods();
 
-        $this->assertEmpty($parentMethods);
+        static::assertEmpty($parentMethods);
 
         $interfaces = $parentClass->getInterfaces();
 
-        $this->assertCount(1, $interfaces);
-        $this->assertArrayHasKey(0, $interfaces);
+        static::assertCount(1, $interfaces);
+        static::assertArrayHasKey(0, $interfaces);
 
         $interface = $interfaces[0];
 
-        $this->assertSame('testIsDeclarationReturnsFalseForInheritedMethodInterface', $interface->getNamespacedName());
+        static::assertSame('testIsDeclarationReturnsFalseForInheritedMethodInterface', $interface->getNamespacedName());
 
         $interfaceMethods = $interface->getMethods();
 
-        $this->assertCount(1, $interfaceMethods);
-        $this->assertArrayHasKey(0, $interfaceMethods);
+        static::assertCount(1, $interfaceMethods);
+        static::assertArrayHasKey(0, $interfaceMethods);
 
         $iterfaceMethod = $interfaceMethods[0];
 
-        $this->assertTrue($iterfaceMethod->isDeclaration());
+        static::assertTrue($iterfaceMethod->isDeclaration());
     }
 }
