@@ -17,10 +17,9 @@
 
 namespace PHPMD\Test\AttributeOverride;
 
-final class testRuleDoesNotApplyToMethodWithOverrideAttribute implements FooInterfaceWithOverride
+final class testRuleAppliesToMethodWithoutOverrideAttribute implements FooInterfaceWithoutOverride
 {
-    #[\Override]
-    public function testRuleDoesNotApplyToMethodWithOverrideAttribute(bool $foo): void
+    public function testRuleAppliesToMethodWithoutOverrideAttribute(bool $foo): void
     {
     }
 }
