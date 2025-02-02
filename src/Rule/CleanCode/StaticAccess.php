@@ -99,6 +99,10 @@ final class StaticAccess extends AbstractRule implements FunctionAware, MethodAw
         return $methodCall->getChild(0)->getNode() instanceof ASTSelfReference;
     }
 
+    /**
+     * @param AbstractNode<ASTMemberPrimaryPrefix> $methodCall
+     * @throws OutOfBoundsException
+     */
     private function isCallingEnumTranslator(AbstractNode $methodCall): bool
     {
         $enumName = $methodCall->getChild(0)->getName();
